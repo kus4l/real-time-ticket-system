@@ -5,18 +5,18 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ThreadPool {
     private final BlockingQueue<Runnable> taskQueue;
-    private final Thread[] workers;
+    private final Thread[] threads;
     private volatile boolean isStopped;
 
     public ThreadPool(int numThreads, int maxTasks) {
         taskQueue = new LinkedBlockingQueue<>(maxTasks);
-        workers = new Thread[numThreads];
+        threads = new Thread[numThreads];
         isStopped = false;
 
         for (int i = 0; i < numThreads; i++) {
-            workers[i] = new Worker(taskQueue);
-            workers[i].setName("Thread - " + (i + 1));
-            workers[i].start();
+            threads[i] = new Worker(taskQueue);
+            threads[i].setName("Thread - " + (i + 1));
+            threads[i].start();
         }
     }
 
@@ -34,7 +34,7 @@ public class ThreadPool {
 
     public void stop() {
         isStopped = true;
-        for (Thread worker : workers) {
+        for (Thread worker : threads ) {
             worker.interrupt();
         }
     }
