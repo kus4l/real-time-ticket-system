@@ -44,11 +44,15 @@ public class TicketSystemConfig {
         Scanner scanner = new Scanner(System.in);
 
         this.totalTickets = promptForInt(scanner, "Enter total tickets: ");
-        this.ticketReleaseRate = promptForInt(scanner, "Enter ticket release rate (seconds): ");
-        this.customerRetrievalRate = promptForInt(scanner, "Enter customer retrieval rate (seconds): ");
+        this.ticketReleaseRate = promptForInt(scanner, "Enter ticket release rate (milliseconds): ");
+        this.customerRetrievalRate = promptForInt(scanner, "Enter customer retrieval rate (milliseconds): ");
         this.maxTicketCapacity = promptForInt(scanner, "Enter max ticket capacity: ");
 
-        saveConfiguration();
+        if (validateConfiguration()) {
+            saveConfiguration();
+        } else {
+            System.out.println("Configuration is invalid. Please reconfigure.");
+        }
     }
 
     private int promptForInt(Scanner scanner, String message) {
@@ -62,6 +66,37 @@ public class TicketSystemConfig {
                 System.out.println("Invalid input. Please enter a positive integer.");
             }
         }
+    }
+
+    // Validate configuration with early returns
+    public boolean validateConfiguration() {
+        if (maxTicketCapacity <= 0) {
+            System.out.println("Max ticket capacity must be greater than zero.");
+            return false;
+        }
+
+        if (totalTickets <= 0) {
+            System.out.println("Total tickets must be greater than zero.");
+            return false;
+        }
+
+        if (totalTickets > maxTicketCapacity) {
+            System.out.println("Total tickets cannot exceed maximum ticket capacity.");
+            return false;
+        }
+
+        if (ticketReleaseRate <= 0) {
+            System.out.println("Ticket release rate must be a positive number.");
+            return false;
+        }
+
+        if (customerRetrievalRate <= 0) {
+            System.out.println("Customer retrieval rate must be a positive number.");
+            return false;
+        }
+
+        // If all checks pass
+        return true;
     }
 
     // Getters
