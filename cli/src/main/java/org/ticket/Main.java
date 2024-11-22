@@ -1,27 +1,31 @@
 package org.ticket;
+import org.slf4j.Logger;
+
 import java.util.Scanner;
 
 public class Main {
     private static boolean isRunning = false;
     private static ThreadPool threadPool;
+    private static final Logger logger = TicketLogger.getLogger();
 
     public static void main(String[] args) throws InterruptedException {
         TicketSystemConfig config = new TicketSystemConfig();
 
+
         // Load configuration from file or configure via CLI if needed
         config.loadConfiguration();
 
-        System.out.println("Starting with configuration:");
-        System.out.println("Total Tickets: " + config.getTotalTickets());
-        System.out.println("Ticket Release Rate: " + config.getTicketReleaseRate());
-        System.out.println("Customer Retrieval Rate: " + config.getCustomerRetrievalRate());
-        System.out.println("Max Ticket Capacity: " + config.getMaxTicketCapacity());
+        logger.info("Starting with configuration:");
+        logger.info("Total Tickets: " + config.getTotalTickets());
+        logger.info("Ticket Release Rate: " + config.getTicketReleaseRate());
+        logger.info("Customer Retrieval Rate: " + config.getCustomerRetrievalRate());
+        logger.info("Max Ticket Capacity: " + config.getMaxTicketCapacity());
 
         Scanner scanner = new Scanner(System.in);
         String command;
 
         while (true) {
-            System.out.print("Enter command (start, stop, status, exit, configure): ");
+            logger.info("Enter command (start, stop, status, exit, configure): ");
             command = scanner.nextLine();
 
             switch (command.toLowerCase()) {
@@ -29,28 +33,28 @@ public class Main {
                     if (!isRunning) {
                         startTicketSystem(config);
                     } else {
-                        System.out.println("System is already running.");
+                        logger.info("System is already running.");
                     }
                     break;
                 case "stop":
                     if (isRunning) {
                         stopTicketSystem();
                     } else {
-                        System.out.println("System is not running.");
+                        logger.info("System is not running.");
                     }
                     break;
                 case "status":
-                    System.out.println("Current status: " + (isRunning ? "Running" : "Stopped"));
+                    logger.info("Current status: " + (isRunning ? "Running" : "Stopped"));
                     break;
                 case "configure":
                     config.configureViaCLI();
                     break;
                 case "exit":
                     stopTicketSystem();
-                    System.out.println("Exiting system.");
+                    logger.info("Exiting system.");
                     return;
                 default:
-                    System.out.println("Invalid command.");
+                    logger.info("Invalid command.");
             }
         }
     }
@@ -61,7 +65,7 @@ public class Main {
         threadPool = new ThreadPool(numberOfThreads, maxTasks);
 
         isRunning = true;
-        System.out.println("Ticket system started.");
+        logger.info("Ticket system started.");
 
         // Start ticket selling (vendors) and purchasing (customers) tasks
         for (int i = 1; i < config.getTotalTickets(); i++) {
@@ -69,13 +73,13 @@ public class Main {
             // Seller Task
             threadPool.execute(() -> {
                 String message = Thread.currentThread().getName() + ": Selling Ticket " + taskNo;
-                System.out.println(message);
+                logger.info(message);
             });
 
             // Customer Task
             threadPool.execute(() -> {
                 String message = Thread.currentThread().getName() + ": Purchasing Ticket " + taskNo;
-                System.out.println(message);
+                logger.info(message);
             });
 
             Thread.sleep(config.getTicketReleaseRate());  // Control the ticket release rate
@@ -88,6 +92,6 @@ public class Main {
             threadPool.stop();
         }
         isRunning = false;
-        System.out.println("Ticket system stopped.");
+        logger.info("Ticket system stopped.");
     }
 }
