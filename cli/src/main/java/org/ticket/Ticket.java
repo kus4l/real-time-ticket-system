@@ -11,4 +11,8 @@ public class Ticket {
         this.ticketId = ticketId;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket ID: " + ticketId;
+    }
 }

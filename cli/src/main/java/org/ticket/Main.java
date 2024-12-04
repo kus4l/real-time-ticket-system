@@ -1,17 +1,16 @@
 package org.ticket;
+
 import org.slf4j.Logger;
 
 import java.util.Scanner;
-import java.util.concurrent.BlockingQueue;
 
 public class Main {
     private static boolean isRunning = false;
-    private static BlockingQueue<Runnable> queue;
     private static final Logger logger = TicketLogger.getLogger();
+    private static TicketPool ticketPool;
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         TicketSystemConfig config = new TicketSystemConfig();
-
 
         // Load configuration from file or configure via CLI if needed
         config.loadConfiguration();
@@ -60,23 +59,28 @@ public class Main {
         }
     }
 
-    private static void startTicketSystem(TicketSystemConfig config) throws InterruptedException {
+    private static void startTicketSystem(TicketSystemConfig config) {
+        ticketPool = new TicketPool(config.getMaxTicketCapacity());
+        isRunning = true;
 
-        TicketPool ticketPool = new TicketPool(config.getMaxTicketCapacity());
+        Thread vendorThread1 = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets(), "Vendor-1"));
+        Thread vendorThread2 = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets(), "Vendor-2"));
+        Thread customerThread1 = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate()));
+        Thread customerThread2 = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate()));
 
-        Thread vendorThread = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets()));
-        Thread vendorThreadTwo = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets()));
-        Thread customerThread = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate()));
-        Thread customerThreadTwo = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate()));
+        vendorThread1.start();
+        vendorThread2.start();
+        customerThread1.start();
+        customerThread2.start();
 
-        vendorThread.start();
-        vendorThreadTwo.start();
-        customerThread.start();
-        customerThreadTwo.start();
+        logger.info("Ticket system started.");
     }
 
     private static void stopTicketSystem() {
         isRunning = false;
+        if (ticketPool != null) {
+            ticketPool.stop();
+        }
         logger.info("Ticket system stopped.");
     }
 }
