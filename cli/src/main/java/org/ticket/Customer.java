@@ -14,15 +14,12 @@ public class Customer implements Runnable {
         while (true) {
             try {
                 ticketPool.purchaseTicket();
-                System.out.println( " purchased ticket");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            try {
                 Thread.sleep(retrievalRate);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                break;
             }
         }
+        System.out.println("Customer thread is closing as there are no more tickets to purchase.");
     }
 }
