@@ -11,10 +11,15 @@ public class Customer implements Runnable {
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            ticketPool.purchaseTicket();
+        while (true) {
             try {
-                Thread.sleep(retrievalRate * 1000L);
+                ticketPool.purchaseTicket();
+                System.out.println( " purchased ticket");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                Thread.sleep(retrievalRate);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

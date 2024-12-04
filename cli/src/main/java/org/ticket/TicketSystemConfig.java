@@ -80,8 +80,8 @@ public class TicketSystemConfig {
             return false;
         }
 
-        if (totalTickets > maxTicketCapacity) {
-            System.out.println("Total tickets cannot exceed maximum ticket capacity.");
+        if (totalTickets < maxTicketCapacity) {
+            System.out.println("Maximum tickets cannot exceed total ticket capacity.");
             return false;
         }
 

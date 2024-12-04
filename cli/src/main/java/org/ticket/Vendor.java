@@ -3,18 +3,26 @@ package org.ticket;
 public class Vendor implements Runnable {
     private final TicketPool ticketPool;
     private final int releaseRate;
+    private int totalTickets;
 
-    public Vendor(TicketPool ticketPool, int releaseRate) {
+    public Vendor(TicketPool ticketPool, int releaseRate, int totalTickets) {
         this.ticketPool = ticketPool;
         this.releaseRate = releaseRate;
+        this.totalTickets = totalTickets;
     }
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted()) {
-            ticketPool.addTickets(1);
+        while (totalTickets > 0) {
+            totalTickets--;
             try {
-                Thread.sleep(releaseRate * 1000L);
+                ticketPool.addTickets(new Ticket());
+                System.out.println("tickets added");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                Thread.sleep(releaseRate);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }

@@ -2,10 +2,11 @@ package org.ticket;
 import org.slf4j.Logger;
 
 import java.util.Scanner;
+import java.util.concurrent.BlockingQueue;
 
 public class Main {
     private static boolean isRunning = false;
-    private static ThreadPool threadPool;
+    private static BlockingQueue<Runnable> queue;
     private static final Logger logger = TicketLogger.getLogger();
 
     public static void main(String[] args) throws InterruptedException {
@@ -60,37 +61,21 @@ public class Main {
     }
 
     private static void startTicketSystem(TicketSystemConfig config) throws InterruptedException {
-        int numberOfThreads = 5;
-        int maxTasks = 50;
-        threadPool = new ThreadPool(numberOfThreads, maxTasks);
 
-        isRunning = true;
-        logger.info("Ticket system started.");
+        TicketPool ticketPool = new TicketPool(config.getMaxTicketCapacity());
 
-        // Start ticket selling (vendors) and purchasing (customers) tasks
-        for (int i = 1; i < config.getTotalTickets(); i++) {
-            int taskNo = i;
-            // Seller Task
-            threadPool.execute(() -> {
-                String message = Thread.currentThread().getName() + ": Selling Ticket " + taskNo;
-                logger.info(message);
-            });
+        Thread vendorThread = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets()));
+        Thread vendorThreadTwo = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets()));
+        Thread customerThread = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate()));
+        Thread customerThreadTwo = new Thread(new Customer(ticketPool, config.getCustomerRetrievalRate()));
 
-            // Customer Task
-            threadPool.execute(() -> {
-                String message = Thread.currentThread().getName() + ": Purchasing Ticket " + taskNo;
-                logger.info(message);
-            });
-
-            Thread.sleep(config.getTicketReleaseRate());  // Control the ticket release rate
-            Thread.sleep(config.getCustomerRetrievalRate());  // Control the customer retrieval rate
-        }
+        vendorThread.start();
+        vendorThreadTwo.start();
+        customerThread.start();
+        customerThreadTwo.start();
     }
 
     private static void stopTicketSystem() {
-        if (threadPool != null) {
-            threadPool.stop();
-        }
         isRunning = false;
         logger.info("Ticket system stopped.");
     }

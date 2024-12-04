@@ -1,42 +1,40 @@
 package org.ticket;
 
+import java.util.ArrayList;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 public class TicketPool
 {
-    private int tickets;
-    private final int maxTicketCapacity;
+
+    private final BlockingQueue<Ticket> ticketQueue = new LinkedBlockingQueue<>();
+    private int maxTicketCapacity;
 
     public TicketPool( int maxTicketCapacity )
     {
-        this.tickets = 0;
         this.maxTicketCapacity = maxTicketCapacity;
     }
 
-    public synchronized boolean addTickets( int amount )
-    {
-        if( tickets + amount <= maxTicketCapacity )
+    public synchronized void addTickets(Ticket ticket ) throws InterruptedException {
+        if( ticket.getTicketId() <= maxTicketCapacity )
         {
-            tickets += amount;
-            System.out.println( "Added " + amount + " tickets. Current tickets: " + tickets );
-            return true;
+            ticketQueue.put(ticket);
+            return;
         }
         System.out.println( "Max capacity reached. Can't add tickets." );
-        return false;
     }
 
-    public synchronized boolean purchaseTicket()
-    {
-        if( tickets > 0 )
+    public synchronized void purchaseTicket() throws InterruptedException {
+        if( true )
         {
-            tickets--;
-            System.out.println( "Ticket purchased. Current tickets: " + tickets );
-            return true;
+            ticketQueue.take();
+            return;
         }
         System.out.println( "No tickets available." );
-        return false;
     }
 
-    public synchronized int getTickets()
-    {
-        return tickets;
-    }
+//    public synchronized int getTickets()
+//    {
+//        return tickets;
+//    }
 }
