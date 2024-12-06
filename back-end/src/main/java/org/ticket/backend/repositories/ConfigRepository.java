@@ -2,9 +2,9 @@ package org.ticket.backend.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import org.ticket.ticketsystem.models.Vendor;
+import org.ticket.backend.models.Configuration;
 
 @Repository
-public interface VendorRepository extends JpaRepository<Vendor,Integer>
+public interface ConfigRepository extends JpaRepository<Configuration, Integer>
 {
 }
