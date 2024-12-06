@@ -9,7 +9,7 @@
 
     <!-- Logger to output logs to the console -->
     <logger name="org.springframework" level="INFO"/>
-    <logger name="org.ticket" level="DEBUG"/>
+    <logger name="org.configuration" level="DEBUG"/>
 
     <!-- Root logger for the application -->
     <root level="INFO">
