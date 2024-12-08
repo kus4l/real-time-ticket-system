@@ -1,6 +1,9 @@
 package org.ticket;
 
+import org.slf4j.Logger;
+
 public class Vendor implements Runnable {
+    private static final Logger logger = TicketLogger.getLogger();
     private final TicketPool ticketPool;
     private final int releaseRate;
     private int totalTickets;
@@ -40,6 +43,6 @@ public class Vendor implements Runnable {
                 return;
             }
         }
-        System.out.println("Vendor " + vendorName + " has reached its limit and is closing.");
+        logger.info(vendorName + " has reached its limit and is closing.");
     }
 }
