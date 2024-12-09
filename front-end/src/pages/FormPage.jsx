@@ -4,9 +4,9 @@ import axios from 'axios';
 const FormPage = () => {
     const [formData, setFormData] = useState({
         totalTickets: '',
-        customerRate: '',
-        vendorRate: '',
-        maxTickets: '',
+        customerRetrievalRate: '',
+        ticketReleaseRate: '',
+        maxTicketCapacity: '',
     });
 
     const [errors, setErrors] = useState({});
@@ -23,14 +23,14 @@ const FormPage = () => {
         if (!formData.totalTickets || isNaN(formData.totalTickets) || formData.totalTickets <= 0) {
             newErrors.totalTickets = 'Enter a valid number of total tickets.';
         }
-        if (!formData.customerRate || isNaN(formData.customerRate) || formData.customerRate <= 0) {
-            newErrors.customerRate = 'Enter a valid customer rate.';
+        if (!formData.customerRetrievalRate || isNaN(formData.customerRetrievalRate) || formData.customerRetrievalRate <= 0) {
+            newErrors.customerRetrievalRate = 'Enter a valid customer rate.';
         }
-        if (!formData.vendorRate || isNaN(formData.vendorRate) || formData.vendorRate <= 0) {
-            newErrors.vendorRate = 'Enter a valid vendor rate.';
+        if (!formData.ticketReleaseRate || isNaN(formData.ticketReleaseRate) || formData.ticketReleaseRate <= 0) {
+            newErrors.ticketReleaseRate = 'Enter a valid vendor rate.';
         }
-        if (!formData.maxTickets || isNaN(formData.maxTickets) || formData.maxTickets <= 0) {
-            newErrors.maxTickets = 'Enter a valid max number of tickets.';
+        if (!formData.maxTicketCapacity || isNaN(formData.maxTicketCapacity) || formData.maxTicketCapacity <= 0) {
+            newErrors.maxTicketCapacity = 'Enter a valid max number of tickets.';
         }
         return newErrors;
     };
@@ -48,7 +48,7 @@ const FormPage = () => {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('http://localhost:8080/config/submit', formData);
+            const response = await axios.post('http://localhost:8080/config/add', formData);
             setSuccessMessage('Form submitted successfully!');
             console.log('Response:', response.data);
         } catch (error) {
@@ -79,36 +79,36 @@ const FormPage = () => {
                     <label className="form-label">Customer Rate</label>
                     <input
                         type="text"
-                        className={`form-control ${errors.customerRate ? 'is-invalid' : ''}`}
-                        name="customerRate"
-                        value={formData.customerRate}
+                        className={`form-control ${errors.customerRetrievalRate ? 'is-invalid' : ''}`}
+                        name="customerRetrievalRate"
+                        value={formData.customerRetrievalRate}
                         onChange={handleChange}
                     />
-                    {errors.customerRate && <div className="invalid-feedback">{errors.customerRate}</div>}
+                    {errors.customerRetrievalRate && <div className="invalid-feedback">{errors.customerRetrievalRate}</div>}
                 </div>
 
                 <div className="mb-3">
                     <label className="form-label">Vendor Rate</label>
                     <input
                         type="text"
-                        className={`form-control ${errors.vendorRate ? 'is-invalid' : ''}`}
-                        name="vendorRate"
-                        value={formData.vendorRate}
+                        className={`form-control ${errors.ticketReleaseRate ? 'is-invalid' : ''}`}
+                        name="ticketReleaseRate"
+                        value={formData.ticketReleaseRate}
                         onChange={handleChange}
                     />
-                    {errors.vendorRate && <div className="invalid-feedback">{errors.vendorRate}</div>}
+                    {errors.ticketReleaseRate && <div className="invalid-feedback">{errors.ticketReleaseRate}</div>}
                 </div>
 
                 <div className="mb-3">
                     <label className="form-label">Max Tickets</label>
                     <input
                         type="text"
-                        className={`form-control ${errors.maxTickets ? 'is-invalid' : ''}`}
-                        name="maxTickets"
-                        value={formData.maxTickets}
+                        className={`form-control ${errors.maxTicketCapacity ? 'is-invalid' : ''}`}
+                        name="maxTicketCapacity"
+                        value={formData.maxTicketCapacity}
                         onChange={handleChange}
                     />
-                    {errors.maxTickets && <div className="invalid-feedback">{errors.maxTickets}</div>}
+                    {errors.maxTicketCapacity && <div className="invalid-feedback">{errors.maxTicketCapacity}</div>}
                 </div>
 
                 {errors.api && <div className="alert alert-danger">{errors.api}</div>}

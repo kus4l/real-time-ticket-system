@@ -1,81 +1,96 @@
 package org.ticket.backend.models;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 public class Configuration
 {
     @Id
-    private int ticketID;
-    private int ticketNumber;
-    private String ticketType;
-    private String ticketDate;
-    private String ticketTime;
-    private String ticketPrice;
+    private int configurationId = 1;
+    private int totalTickets;
+    private int maxTicketCapacity;
+    private int ticketReleaseRate;
+    private int customerRetrievalRate;
 
-
-    public String getTicketType() {
-        return ticketType;
+    public Configuration() {
     }
 
-    public void setTicketType(String ticketType) {
-        this.ticketType = ticketType;
+    public Configuration(int configurationId, int totalTickets, int maxTicketCapacity, int ticketReleaseRate, int customerRetrievalRate) {
+        this.configurationId = configurationId;
+        this.totalTickets = totalTickets;
+        this.maxTicketCapacity = maxTicketCapacity;
+        this.ticketReleaseRate = ticketReleaseRate;
+        this.customerRetrievalRate = customerRetrievalRate;
     }
 
-    public int getTicketID() {
-        return ticketID;
+    public int getConfigurationId() {
+        return configurationId;
     }
 
-    public void setTicketID(int ticketID) {
-        this.ticketID = ticketID;
+    public void setConfigurationId(int configurationId) {
+        this.configurationId = configurationId;
     }
 
-    public int getTicketNumber() {
-        return ticketNumber;
+    public int getTotalTickets()
+    {
+        return totalTickets;
     }
 
-    public void setTicketNumber(int ticketNumber) {
-        this.ticketNumber = ticketNumber;
+    public void setTotalTickets( int totalTickets )
+    {
+        this.totalTickets = totalTickets;
     }
 
-    public String getTicketDate() {
-        return ticketDate;
+    public int getMaxTicketCapacity()
+    {
+        return maxTicketCapacity;
     }
 
-    public void setTicketDate(String ticketDate) {
-        this.ticketDate = ticketDate;
+    public void setMaxTicketCapacity( int maxTicketCapacity )
+    {
+        this.maxTicketCapacity = maxTicketCapacity;
     }
 
-    public String getTicketTime() {
-        return ticketTime;
+    public int getTicketReleaseRate()
+    {
+        return ticketReleaseRate;
     }
 
-    public void setTicketTime(String ticketTime) {
-        this.ticketTime = ticketTime;
+    public void setTicketReleaseRate( int ticketReleaseRate )
+    {
+        this.ticketReleaseRate = ticketReleaseRate;
     }
 
-    public String getTicketPrice() {
-        return ticketPrice;
+    public int getCustomerRetrievalRate()
+    {
+        return customerRetrievalRate;
     }
 
-    public void setTicketPrice(String ticketPrice) {
-        this.ticketPrice = ticketPrice;
+    public void setCustomerRetrievalRate( int customerRetrievalRate )
+    {
+        this.customerRetrievalRate = customerRetrievalRate;
     }
 
-    public Configuration(int ticketID, int ticketNumber, String ticketType, String ticketDate, String ticketTime, String ticketPrice) {
-        this.ticketID = ticketID;
-        this.ticketNumber = ticketNumber;
-        this.ticketType = ticketType;
-        this.ticketDate = ticketDate;
-        this.ticketTime = ticketTime;
-        this.ticketPrice = ticketPrice;
+    public void saveConfiguration(String fileName) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        FileWriter file = new FileWriter(fileName);
+        mapper.writeValue(file, this);
+        file.close();
+    }
+
+    public static Configuration loadConfiguration(String fileName) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        String content = new String(Files.readAllBytes(Paths.get(fileName)));
+        return mapper.readValue(content, Configuration.class);
+    }
+
+    public boolean validate() {
+        return totalTickets > 0 && maxTicketCapacity > 0 && ticketReleaseRate > 0 && customerRetrievalRate > 0;
     }
 }

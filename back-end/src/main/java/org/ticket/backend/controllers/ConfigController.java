@@ -14,48 +14,22 @@ public class ConfigController {
 
     // GET method to provide application info
     @GetMapping("/get")
-    public String getConfigs() {
-        return "The application is up...";
+    public Configuration getConfigs() {
+        try {
+            return configService.getConfig();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // PUT method to add a new config
-    @PutMapping("/add")
+    @PostMapping("/add")
     public String addConfig(@RequestBody Configuration configuration) {
         try {
             configService.addConfig(configuration);
             return "Config added successfully!";
         } catch (Exception e) {
             return "Error adding config: " + e.getMessage();
-        }
-    }
-
-    // POST method to update an existing config
-    @PostMapping("/edit/{configId}")
-    public String editConfig(@PathVariable Long configId, @RequestBody Configuration configuration) {
-        try {
-            boolean isUpdated = configService.editConfig(configId, configuration);
-            if (isUpdated) {
-                return "Config updated successfully!";
-            } else {
-                return "Config not found!";
-            }
-        } catch (Exception e) {
-            return "Error updating config: " + e.getMessage();
-        }
-    }
-
-    // DELETE method to delete a config
-    @DeleteMapping("/delete/{configId}")
-    public String deleteConfig(@PathVariable Long configId) {
-        try {
-            boolean isDeleted = configService.deleteConfig(configId);
-            if (isDeleted) {
-                return "Config deleted successfully!";
-            } else {
-                return "Config not found!";
-            }
-        } catch (Exception e) {
-            return "Error deleting config: " + e.getMessage();
         }
     }
 }
