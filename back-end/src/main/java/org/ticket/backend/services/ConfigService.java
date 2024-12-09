@@ -7,7 +7,11 @@ import org.ticket.backend.repositories.ConfigRepository;
 @Service
 public class ConfigService {
 
-    private ConfigRepository configRepository;
+    private final ConfigRepository configRepository;
+
+    public ConfigService(ConfigRepository configRepository) {
+        this.configRepository = configRepository;
+    }
 
     public void addConfig(Configuration configuration) {
         configRepository.save(configuration);
