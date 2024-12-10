@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Swal from 'sweetalert2';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
@@ -7,9 +8,21 @@ const Navbar = () => {
         try {
             const response = await axios.post('http://localhost:8080/execution/start');
             if (response.status !== 200) throw new Error('Failed to start simulation');
-            alert('Ticketing system started successfully!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Ticketing system started successfully!',
+                timer: 3000,
+                showConfirmButton: false,
+            });
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: `Failed to start simulation: ${error.message}`,
+                timer: 3000,
+                showConfirmButton: false,
+            });
         }
     };
 
@@ -17,11 +30,24 @@ const Navbar = () => {
         try {
             const response = await axios.post('http://localhost:8080/execution/stop');
             if (response.status !== 200) throw new Error('Failed to stop simulation');
-            alert('Simulation stopped successfully!');
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Simulation stopped successfully!',
+                timer: 3000,
+                showConfirmButton: false,
+            });
         } catch (error) {
-            alert(`Error: ${error.message}`);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: `Failed to stop simulation: ${error.message}`,
+                timer: 3000,
+                showConfirmButton: false,
+            });
         }
     };
+
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-primary-subtle">

@@ -58,6 +58,7 @@ public class ExecutionService {
         ticketPool = new TicketPool(config.getMaxTicketCapacity());
         isRunning = true;
 
+        logger.info("Ticketing system started successfully.");
         // Vendor threads
         Thread vendorThread1 = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets(), "Vendor-1"));
         Thread vendorThread2 = new Thread(new Vendor(ticketPool, config.getTicketReleaseRate(), config.getTotalTickets(), "Vendor-2"));
@@ -88,8 +89,6 @@ public class ExecutionService {
         customerThread2.start();
         customerThread3.start();
         customerThread4.start();
-
-        logger.info("Ticketing system started successfully.");
     }
 
     /**
