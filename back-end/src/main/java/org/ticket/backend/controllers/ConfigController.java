@@ -19,7 +19,7 @@ public class ConfigController {
     }
 
     // PUT method to add a new config
-    @PutMapping("/add")
+    @PostMapping("/add")
     public String addConfig(@RequestBody Configuration configuration) {
         try {
             configService.addConfig(configuration);
@@ -30,7 +30,7 @@ public class ConfigController {
     }
 
     // POST method to update an existing config
-    @PostMapping("/edit/{configId}")
+    @PutMapping("/edit/{configId}")
     public String editConfig(@PathVariable Long configId, @RequestBody Configuration configuration) {
         try {
             boolean isUpdated = configService.editConfig(configId, configuration);

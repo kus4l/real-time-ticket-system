@@ -1,6 +1,26 @@
 import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
+    const handleStartSimulation = async () => {
+        try {
+            const response = await fetch('/execution/start', { method: 'POST' });
+            if (!response.ok) throw new Error('Failed to start simulation');
+            alert('Ticketing system started successfully!');
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    };
+
+    const handleStopSimulation = async () => {
+        try {
+            const response = await fetch('/execution/stop', { method: 'POST' });
+            if (!response.ok) throw new Error('Failed to stop simulation');
+            alert('Simulation stopped successfully!');
+        } catch (error) {
+            alert(`Error: ${error.message}`);
+        }
+    };
+
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-primary-subtle">
             <div className="container-fluid">
@@ -18,6 +38,20 @@ const Navbar = () => {
                             </NavLink>
                         </li>
                     </ul>
+                    <div>
+                        <button
+                            className="btn btn-success me-2"
+                            onClick={handleStartSimulation}
+                        >
+                            Start
+                        </button>
+                        <button
+                            className="btn btn-danger"
+                            onClick={handleStopSimulation}
+                        >
+                            Stop
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
