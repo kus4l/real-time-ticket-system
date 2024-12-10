@@ -1,10 +1,12 @@
+import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
+
     const handleStartSimulation = async () => {
         try {
-            const response = await fetch('/execution/start', { method: 'POST' });
-            if (!response.ok) throw new Error('Failed to start simulation');
+            const response = await axios.post('http://localhost:8080/execution/start');
+            if (response.status !== 200) throw new Error('Failed to start simulation');
             alert('Ticketing system started successfully!');
         } catch (error) {
             alert(`Error: ${error.message}`);
@@ -13,8 +15,8 @@ const Navbar = () => {
 
     const handleStopSimulation = async () => {
         try {
-            const response = await fetch('/execution/stop', { method: 'POST' });
-            if (!response.ok) throw new Error('Failed to stop simulation');
+            const response = await axios.post('http://localhost:8080/execution/stop');
+            if (response.status !== 200) throw new Error('Failed to stop simulation');
             alert('Simulation stopped successfully!');
         } catch (error) {
             alert(`Error: ${error.message}`);
