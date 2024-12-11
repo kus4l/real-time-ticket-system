@@ -1,7 +1,7 @@
-# Real-Time Ticket System
+# Real-Time-Ticket-System
 
 ## Introduction
-The Real-Time Ticket System is a simulation front-end project that provides an interface to manage and visualize a ticketing system in real time. Built with React and Vite, the system aims to deliver a seamless and efficient user experience for tracking ticket statuses and interactions.
+The Real Time Ticket System is a simulation front-end project that provides an interface to manage and visualize a ticketing system in real time. Built with React and Vite, the system aims to deliver a seamless and efficient user experience for tracking ticket statuses and interactions.
 
 ## Setup Instructions
 
