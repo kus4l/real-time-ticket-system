@@ -20,20 +20,45 @@ const FormPage = () => {
 
     const validateForm = () => {
         const newErrors = {};
+
+        // Validate totalTickets
         if (!formData.totalTickets || isNaN(formData.totalTickets) || formData.totalTickets <= 0) {
             newErrors.totalTickets = 'Enter a valid number of total tickets.';
         }
-        if (!formData.customerRetrievalRate || isNaN(formData.customerRetrievalRate) || formData.customerRetrievalRate <= 0) {
-            newErrors.customerRetrievalRate = 'Enter a valid customer rate.';
-        }
-        if (!formData.ticketReleaseRate || isNaN(formData.ticketReleaseRate) || formData.ticketReleaseRate <= 0) {
-            newErrors.ticketReleaseRate = 'Enter a valid vendor rate.';
-        }
+
+        // Validate maxTicketCapacity
         if (!formData.maxTicketCapacity || isNaN(formData.maxTicketCapacity) || formData.maxTicketCapacity <= 0) {
             newErrors.maxTicketCapacity = 'Enter a valid max number of tickets.';
         }
+
+        // Validate relationship between totalTickets and maxTicketCapacity
+        if (formData.totalTickets && formData.maxTicketCapacity && formData.totalTickets > formData.maxTicketCapacity) {
+            newErrors.totalTickets = 'Total tickets cannot exceed the maximum ticket capacity.';
+        }
+
+        // Validate ticketReleaseRate
+        if (!formData.ticketReleaseRate || isNaN(formData.ticketReleaseRate) || formData.ticketReleaseRate <= 0) {
+            newErrors.ticketReleaseRate = 'Enter a valid vendor rate in milliseconds.';
+        }
+
+        // Validate customerRetrievalRate
+        if (!formData.customerRetrievalRate || isNaN(formData.customerRetrievalRate) || formData.customerRetrievalRate <= 0) {
+            newErrors.customerRetrievalRate = 'Enter a valid customer rate in milliseconds.';
+        }
+
+        // Validate ticketReleaseRate frequency
+        if (formData.ticketReleaseRate && formData.ticketReleaseRate > 60000) {
+            newErrors.ticketReleaseRate = 'Ticket release rate should be less than or equal to 60,000 milliseconds (1 minute).';
+        }
+
+        // Validate customerRetrievalRate frequency
+        if (formData.customerRetrievalRate && formData.customerRetrievalRate > 60000) {
+            newErrors.customerRetrievalRate = 'Customer retrieval rate should be less than or equal to 60,000 milliseconds (1 minute).';
+        }
+
         return newErrors;
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
