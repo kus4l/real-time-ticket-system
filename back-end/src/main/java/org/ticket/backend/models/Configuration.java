@@ -8,19 +8,21 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@Entity
-public class Configuration
-{
-    @Id
-    private int configurationId = 1;
-    private int totalTickets;
-    private int maxTicketCapacity;
-    private int ticketReleaseRate;
-    private int customerRetrievalRate;
+@Entity // Marks this class as a JPA entity to be mapped to a database table
+public class Configuration {
 
+    @Id
+    private int configurationId = 1; // Unique identifier for the configuration
+    private int totalTickets; // Total number of tickets
+    private int maxTicketCapacity; // Maximum capacity of the ticket pool
+    private int ticketReleaseRate; // Rate at which tickets are released
+    private int customerRetrievalRate; // Rate at which customers retrieve tickets
+
+    // Default constructor
     public Configuration() {
     }
 
+    // Parameterized constructor to initialize configuration properties
     public Configuration(int configurationId, int totalTickets, int maxTicketCapacity, int ticketReleaseRate, int customerRetrievalRate) {
         this.configurationId = configurationId;
         this.totalTickets = totalTickets;
@@ -29,6 +31,7 @@ public class Configuration
         this.customerRetrievalRate = customerRetrievalRate;
     }
 
+    // Getter and setter for configurationId
     public int getConfigurationId() {
         return configurationId;
     }
@@ -37,60 +40,39 @@ public class Configuration
         this.configurationId = configurationId;
     }
 
-    public int getTotalTickets()
-    {
+    // Getter and setter for totalTickets
+    public int getTotalTickets() {
         return totalTickets;
     }
 
-    public void setTotalTickets( int totalTickets )
-    {
+    public void setTotalTickets(int totalTickets) {
         this.totalTickets = totalTickets;
     }
 
-    public int getMaxTicketCapacity()
-    {
+    // Getter and setter for maxTicketCapacity
+    public int getMaxTicketCapacity() {
         return maxTicketCapacity;
     }
 
-    public void setMaxTicketCapacity( int maxTicketCapacity )
-    {
+    public void setMaxTicketCapacity(int maxTicketCapacity) {
         this.maxTicketCapacity = maxTicketCapacity;
     }
 
-    public int getTicketReleaseRate()
-    {
+    // Getter and setter for ticketReleaseRate
+    public int getTicketReleaseRate() {
         return ticketReleaseRate;
     }
 
-    public void setTicketReleaseRate( int ticketReleaseRate )
-    {
+    public void setTicketReleaseRate(int ticketReleaseRate) {
         this.ticketReleaseRate = ticketReleaseRate;
     }
 
-    public int getCustomerRetrievalRate()
-    {
+    // Getter and setter for customerRetrievalRate
+    public int getCustomerRetrievalRate() {
         return customerRetrievalRate;
     }
 
-    public void setCustomerRetrievalRate( int customerRetrievalRate )
-    {
+    public void setCustomerRetrievalRate(int customerRetrievalRate) {
         this.customerRetrievalRate = customerRetrievalRate;
-    }
-
-    public void saveConfiguration(String fileName) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        FileWriter file = new FileWriter(fileName);
-        mapper.writeValue(file, this);
-        file.close();
-    }
-
-    public static Configuration loadConfiguration(String fileName) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        String content = new String(Files.readAllBytes(Paths.get(fileName)));
-        return mapper.readValue(content, Configuration.class);
-    }
-
-    public boolean validate() {
-        return totalTickets > 0 && maxTicketCapacity > 0 && ticketReleaseRate > 0 && customerRetrievalRate > 0;
     }
 }
